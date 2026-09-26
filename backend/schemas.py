@@ -1,9 +1,44 @@
-from datetime import date
-from pydantic import BaseModel, ConfigDict, Field
+from datetime import date, datetime
+from typing import Optional
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
 
 
 class HealthResponse(BaseModel):
     status: str
+
+
+# -------------------------------------------------------------------------
+# Auth & User Schemas
+# -------------------------------------------------------------------------
+
+class UserBase(BaseModel):
+    login_id: str = Field(..., min_length=6, max_length=12)
+    email: str
+    full_name: str
+    role: str = Field(default="inventory_manager")
+
+
+class UserSignup(UserBase):
+    password: str = Field(..., min_length=8)
+
+
+class UserLogin(BaseModel):
+    login_id: str
+    password: str
+
+
+class UserResponse(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    is_active: bool = True
+    created_at: Optional[datetime] = None
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
 
 
 class ProductCreate(BaseModel):

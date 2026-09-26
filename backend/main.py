@@ -1,6 +1,4 @@
-from fastapi import FastAPI
-
-from backend.routers import (
+from routers import (
     auth_router,
     dashboard_router,
     inventory_router,
@@ -9,8 +7,27 @@ from backend.routers import (
     products_router,
     settings_router,
 )
+import sys
+from pathlib import Path
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# Ensure backend directory is in sys.path
+backend_dir = Path(__file__).resolve().parent
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
+
 
 app = FastAPI(title="StockSense API", version="0.1.0")
+
+# Enable CORS for frontend development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 for router_module in (
     auth_router,

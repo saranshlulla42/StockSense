@@ -1,6 +1,5 @@
 from fastapi import APIRouter
-
-from backend.schemas import OperationCreate, OperationResponse
+from schemas import OperationCreate, OperationResponse
 
 router = APIRouter(prefix="/operations", tags=["operations"])
 
