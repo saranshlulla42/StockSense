@@ -15,6 +15,8 @@ import {
   Zap,
   Warehouse,
   User,
+  ShoppingBag,
+  Truck,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -46,6 +48,8 @@ export const navGroups: NavGroup[] = [
   {
     groupLabel: 'Operations',
     items: [
+      { label: 'Sales Orders',        path: '/orders',        icon: ShoppingBag },
+      { label: 'Shipment Tracking',   path: '/shipments',     icon: Truck },
       { label: 'Receipts',            path: '/receipts',      icon: ArrowDownToLine },
       { label: 'Deliveries',          path: '/deliveries',    icon: ArrowUpFromLine },
       { label: 'Internal Transfers',  path: '/transfers',     icon: ArrowLeftRight },

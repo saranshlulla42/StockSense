@@ -10,6 +10,9 @@ import { SignupPage }  from './pages/auth/SignupPage'
 import { DashboardPage }      from './pages/DashboardPage'
 import { ProductsPage }       from './pages/ProductsPage'
 import { LocationsPage }      from './pages/LocationsPage'
+import { OrdersPage }         from './pages/OrdersPage'
+import { ShipmentsPage }      from './pages/ShipmentsPage'
+import { ShipmentDetailPage }  from './pages/ShipmentDetailPage'
 import { ReceiptsPage }       from './pages/ReceiptsPage'
 import { DeliveriesPage }     from './pages/DeliveriesPage'
 import { TransfersPage }      from './pages/TransfersPage'
@@ -45,6 +48,9 @@ function App() {
                 <Route path="/locations"        element={<LocationsPage />} />
 
                 {/* Operations */}
+                <Route path="/orders"           element={<OrdersPage />} />
+                <Route path="/shipments"        element={<ShipmentsPage />} />
+                <Route path="/shipments/:id"    element={<ShipmentDetailPage />} />
                 <Route path="/receipts"         element={<ReceiptsPage />} />
                 <Route path="/deliveries"       element={<DeliveriesPage />} />
                 <Route path="/transfers"        element={<TransfersPage />} />
