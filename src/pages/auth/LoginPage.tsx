@@ -1,21 +1,54 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { TrendingUp, Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
+import { TrendingUp, Eye, EyeOff, Mail, Lock, ArrowLeft, AlertCircle } from 'lucide-react'
 import { AuthAside } from '../../components/layout/AuthAside'
+import { useAuth, isApiError } from '../../context/AuthContext'
 
 export function LoginPage() {
   const navigate = useNavigate()
+  const { login, isAuthenticated } = useAuth()
+
   const [showPassword, setShowPassword] = useState(false)
   const [form, setForm] = useState({ email: '', password: '' })
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  // If already logged in, go straight to dashboard
+  if (isAuthenticated) {
+    navigate('/dashboard', { replace: true })
+    return null
+  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    setError(null)
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // TODO: wire up auth
-    navigate('/dashboard')
+    setError(null)
+    setIsLoading(true)
+
+    try {
+      await login(form.email, form.password)
+      navigate('/dashboard', { replace: true })
+    } catch (err) {
+      if (isApiError(err) && err.status === 403) {
+        // Email not yet verified — redirect to signup page to complete OTP
+        navigate('/signup', {
+          replace: true,
+          state: { pendingEmail: form.email, fromLogin: true },
+        })
+      } else {
+        setError(
+          isApiError(err)
+            ? err.message
+            : 'Something went wrong. Please try again.',
+        )
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -77,6 +110,14 @@ export function LoginPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Error banner */}
+              {error && (
+                <div className="flex items-start gap-2 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2.5 text-sm text-rose-700">
+                  <AlertCircle size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
+                  <span>{error}</span>
+                </div>
+              )}
+
               {/* Email */}
               <div>
                 <label
@@ -140,9 +181,7 @@ export function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
-                    }
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                     aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -153,9 +192,17 @@ export function LoginPage() {
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-semibold py-2.5 rounded-lg text-sm transition-all shadow-sm shadow-indigo-200"
+                disabled={isLoading}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg text-sm transition-all shadow-sm shadow-indigo-200 flex items-center justify-center gap-2"
               >
-                Sign in
+                {isLoading ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                    Signing in…
+                  </>
+                ) : (
+                  'Sign in'
+                )}
               </button>
             </form>
 

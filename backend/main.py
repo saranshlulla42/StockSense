@@ -6,6 +6,7 @@ from routers import (
     operations_router,
     products_router,
     settings_router,
+    intelligence_router,
 )
 import sys
 from pathlib import Path
@@ -37,6 +38,7 @@ for router_module in (
     inventory_router,
     moves_router,
     settings_router,
+    intelligence_router,
 ):
     app.include_router(router_module.router, prefix="/api/v1")
 

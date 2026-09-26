@@ -1,13 +1,15 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   ArrowUpRight,
   ChevronLeft,
   ChevronRight,
+  LogOut,
   TrendingUp,
   Warehouse,
   X,
 } from 'lucide-react'
 import { navGroups } from '../../config/navigation'
+import { useAuth } from '../../context/AuthContext'
 
 interface SidebarProps {
   collapsed: boolean
@@ -20,6 +22,23 @@ export function Sidebar({
   onToggleCollapse,
   onNavigate,
 }: SidebarProps) {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const initial = user?.full_name?.charAt(0).toUpperCase() ?? 'U'
+  const displayName = user?.full_name ?? 'Your account'
+  const displayRole =
+    user?.role === 'warehouse_manager'
+      ? 'Warehouse manager'
+      : user?.role === 'inventory_manager'
+        ? 'Inventory manager'
+        : 'Staff'
+
+  function handleLogout() {
+    logout()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <aside
       className={`flex h-full shrink-0 flex-col overflow-hidden border-r border-slate-800 bg-slate-900 text-slate-300 transition-[width] ${collapsed ? 'w-20' : 'w-64'}`}
@@ -103,15 +122,15 @@ export function Sidebar({
           className={`flex items-center rounded-xl p-2 hover:bg-slate-800 ${collapsed ? 'justify-center' : 'gap-3'}`}
         >
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-indigo-400/20 bg-indigo-400/15 text-sm font-semibold text-indigo-200">
-            U
+            {initial}
           </span>
           {!collapsed && (
-            <div>
-              <p className="text-xs font-semibold text-slate-200">
-                Your account
+            <div className="min-w-0">
+              <p className="truncate text-xs font-semibold text-slate-200">
+                {displayName}
               </p>
-              <p className="mt-0.5 text-[11px] text-slate-400">
-                Profile & preferences
+              <p className="mt-0.5 truncate text-[11px] text-slate-400">
+                {displayRole}
               </p>
             </div>
           )}
@@ -124,6 +143,16 @@ export function Sidebar({
             Back to home <ArrowUpRight size={14} />
           </Link>
         )}
+        {/* Sign out */}
+        <button
+          onClick={handleLogout}
+          title="Sign out"
+          className={`flex w-full items-center rounded-lg py-2 text-xs text-slate-500 hover:bg-slate-800 hover:text-rose-400 transition-colors ${collapsed ? 'justify-center' : 'gap-2 px-3'}`}
+          aria-label="Sign out"
+        >
+          <LogOut size={15} />
+          {!collapsed && 'Sign out'}
+        </button>
         {!onNavigate && (
           <button
             onClick={onToggleCollapse}
