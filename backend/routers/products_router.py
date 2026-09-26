@@ -1,6 +1,5 @@
 from fastapi import APIRouter
-
-from backend.schemas import ProductCreate, ProductResponse
+from schemas import ProductCreate, ProductResponse
 
 router = APIRouter(prefix="/products", tags=["products"])
 

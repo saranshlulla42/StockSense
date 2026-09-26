@@ -4,6 +4,8 @@ StockSense — SQLAlchemy Models & Core Inventory Utilities.
 Compatible with SQLite (local dev) and PostgreSQL (Supabase / Cloud SQL).
 """
 
+import os
+from pathlib import Path
 from datetime import datetime, date
 from typing import Optional
 from sqlalchemy import (
@@ -13,7 +15,9 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, Session
 from sqlalchemy.ext.hybrid import hybrid_property
 
-DATABASE_URL = "sqlite:///./stocksense.db"
+DEFAULT_DB_PATH = Path(__file__).resolve().parent / "stocksense.db"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", f"sqlite:///{DEFAULT_DB_PATH.as_posix()}")
 
 engine = create_engine(
     DATABASE_URL,
