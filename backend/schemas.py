@@ -32,7 +32,24 @@ class UserResponse(UserBase):
 
     id: int
     is_active: bool = True
+    is_verified: bool = False
     created_at: Optional[datetime] = None
+
+
+class SignupResponse(BaseModel):
+    message: str
+    email: str
+    requires_otp: bool = True
+    demo_otp: Optional[str] = None
+
+
+class VerifyOtpRequest(BaseModel):
+    email: str
+    otp: str = Field(..., min_length=6, max_length=6)
+
+
+class ResendOtpRequest(BaseModel):
+    email: str
 
 
 class TokenResponse(BaseModel):

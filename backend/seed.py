@@ -36,14 +36,18 @@ def seed_database():
             email="manager@stocksense.io",
             password_hash=get_password_hash("Admin@123"),
             full_name="Alex Rivera",
-            role="inventory_manager"
+            role="inventory_manager",
+            is_active=True,
+            is_verified=True
         )
         staff = User(
             login_id="staff01",
             email="staff@stocksense.io",
             password_hash=get_password_hash("Staff@123"),
             full_name="Sam Miller",
-            role="warehouse_staff"
+            role="warehouse_staff",
+            is_active=True,
+            is_verified=True
         )
         session.add_all([manager, staff])
         session.flush()
