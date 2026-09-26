@@ -1,18 +1,74 @@
-import re
-from datetime import datetime, timedelta
-from typing import Optional
-from fastapi import HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-import bcrypt
-from sqlalchemy.orm import Session
 from models import SessionLocal, User
+from sqlalchemy.orm import Session
+import bcrypt
+from jose import JWTError, jwt
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import HTTPException, status, Depends
+import os
+import random
+import re
+import smtplib
+from datetime import datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from typing import Optional
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SECRET_KEY = "stocksense-hackathon-insecure-secret-key-change-in-prod"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
+
+def generate_otp() -> str:
+    """Generates a 6-digit numeric OTP."""
+    return str(random.randint(100000, 999999))
+
+
+def send_verification_email(to_email: str, otp: str) -> bool:
+    """
+    Dispatches verification email with OTP.
+    Always prints to console for seamless hackathon demoing/testing.
+    Sends real email if SMTP environment variables are configured.
+    """
+    print("\n" + "=" * 60)
+    print(f"[EMAIL DISPATCH] Verification OTP for {to_email}")
+    print(f"[OTP CODE] => {otp}  (Expires in 10 minutes)")
+    print("=" * 60 + "\n")
+
+    smtp_host = os.getenv("SMTP_HOST")
+    smtp_port = int(os.getenv("SMTP_PORT", "587"))
+    smtp_user = os.getenv("SMTP_USER")
+    smtp_pass = os.getenv("SMTP_PASSWORD")
+
+    if smtp_host and smtp_user and smtp_pass:
+        try:
+            msg = MIMEMultipart()
+            msg["From"] = smtp_user
+            msg["To"] = to_email
+            msg["Subject"] = "StockSense — Verify Your Email OTP"
+            body = (
+                f"Hello,\n\n"
+                f"Your StockSense email verification OTP is: {otp}\n\n"
+                f"This code will expire in 10 minutes.\n\n"
+                f"Best regards,\nStockSense Inventory Team"
+            )
+            msg.attach(MIMEText(body, "plain"))
+
+            with smtplib.SMTP(smtp_host, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            return True
+        except Exception as e:
+            print(
+                f"[SMTP Warning] Could not send live email: {e} (Using console OTP)")
+            return False
+    return True
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

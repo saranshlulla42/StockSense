@@ -38,6 +38,9 @@ class User(Base):
     full_name = Column(String(100), nullable=False)
     role = Column(String(30), nullable=False, default="inventory_manager")
     is_active = Column(Boolean, nullable=False, default=True)
+    is_verified = Column(Boolean, nullable=False, default=False)
+    otp_code = Column(String(10), nullable=True)
+    otp_expires_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     __table_args__ = (

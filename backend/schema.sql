@@ -16,6 +16,9 @@ CREATE TABLE users (
     role            TEXT NOT NULL DEFAULT 'inventory_manager'
                     CHECK (role IN ('inventory_manager', 'warehouse_staff')),
     is_active       BOOLEAN NOT NULL DEFAULT 1,
+    is_verified     BOOLEAN NOT NULL DEFAULT 0,
+    otp_code        TEXT,
+    otp_expires_at  TIMESTAMP,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
