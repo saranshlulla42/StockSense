@@ -1,5 +1,8 @@
 # StockSense Agent Guidelines & Design System
 
+> [!IMPORTANT]
+> For any frontend page, layout, component, responsive, or visual work, read and follow [`frontend-agent.md`](./frontend-agent.md) first. It documents the current root `src/` frontend and overrides older frontend guidance in this file when the two conflict. Do not add new work to the legacy `frontend/` directory.
+
 All agents operating in this repository must adhere to the design system established for StockSense, as exemplified in [`WelcomePage.tsx`](file:///home/abhijay/python/StockSense/src/pages/auth/WelcomePage.tsx), [`LoginPage.tsx`](file:///home/abhijay/python/StockSense/src/pages/auth/LoginPage.tsx), and [`SignupPage.tsx`](file:///home/abhijay/python/StockSense/src/pages/auth/SignupPage.tsx).
 
 ---
