@@ -1,5 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
+
+// Auth / public pages
+import { WelcomePage } from './pages/auth/WelcomePage'
+import { LoginPage }   from './pages/auth/LoginPage'
+import { SignupPage }  from './pages/auth/SignupPage'
 
 // Pages
 import { DashboardPage }      from './pages/DashboardPage'
@@ -21,8 +26,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect root to dashboard */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Public / auth routes (no app shell) */}
+        <Route path="/"       element={<WelcomePage />} />
+        <Route path="/login"  element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
 
         {/* App shell wraps all authenticated pages */}
         <Route
