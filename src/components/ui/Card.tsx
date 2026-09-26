@@ -8,8 +8,8 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 const paddingStyles = {
   none: '',
   sm: 'p-4',
-  md: 'p-5',
-  lg: 'p-6',
+  md: 'p-5 sm:p-6',
+  lg: 'p-6 sm:p-8',
 }
 
 export function Card({
@@ -22,9 +22,9 @@ export function Card({
   return (
     <div
       className={[
-        'bg-white rounded-lg',
-        border ? 'border border-gray-200' : '',
-        'shadow-sm',
+        'bg-white rounded-2xl min-w-0',
+        border ? 'border border-gray-200/80' : '',
+        'shadow-[0_2px_6px_0_rgb(15_23_42/0.025)]',
         paddingStyles[padding],
         className,
       ].join(' ')}
@@ -42,7 +42,10 @@ export function CardHeader({
 }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={['flex items-center justify-between mb-4', className].join(' ')}
+      className={[
+        'flex items-center justify-between gap-3 mb-4',
+        className,
+      ].join(' ')}
       {...rest}
     >
       {children}

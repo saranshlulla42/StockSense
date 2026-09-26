@@ -12,15 +12,21 @@ interface PageHeaderProps {
  */
 export function PageHeader({ title, description, actions }: PageHeaderProps) {
   return (
-    <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
+    <div className="flex items-start sm:items-center justify-between mb-8 gap-4 flex-wrap">
       <div className="min-w-0">
-        <h2 className="text-lg font-semibold text-gray-900 leading-snug">{title}</h2>
+        <h1 className="text-2xl sm:text-[28px] tracking-tight font-semibold text-gray-900 leading-tight">
+          {title}
+        </h1>
         {description && (
-          <p className="text-sm text-gray-500 mt-0.5">{description}</p>
+          <p className="text-sm leading-6 text-gray-500 mt-2 max-w-2xl">
+            {description}
+          </p>
         )}
       </div>
       {actions && (
-        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">{actions}</div>
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
+          {actions}
+        </div>
       )}
     </div>
   )

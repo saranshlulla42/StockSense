@@ -20,10 +20,7 @@ export function Input({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label
-          htmlFor={id}
-          className="text-xs font-medium text-gray-600 uppercase tracking-wide"
-        >
+        <label htmlFor={id} className="text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
@@ -37,12 +34,14 @@ export function Input({
         <input
           id={id}
           className={[
-            'w-full h-9 rounded-md border bg-white text-sm text-gray-800 placeholder:text-gray-400',
-            'border-gray-300 hover:border-gray-400',
+            'w-full h-11 rounded-xl border bg-white text-sm text-gray-800 placeholder:text-gray-400',
+            'border-gray-200 hover:border-gray-300',
             'focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
             'transition-colors duration-150',
             'disabled:bg-gray-50 disabled:cursor-not-allowed disabled:text-gray-500',
-            error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : '',
+            error
+              ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+              : '',
             LeadingIcon ? 'pl-9 pr-3' : 'px-3',
             className,
           ].join(' ')}

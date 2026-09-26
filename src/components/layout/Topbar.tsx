@@ -1,90 +1,79 @@
-import { useLocation } from 'react-router-dom'
-import { Bell, Search } from 'lucide-react'
+import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { ChevronRight, Menu, Search } from 'lucide-react'
 import { navGroups, profileNavItem } from '../../config/navigation'
 
-interface TopbarProps {
-  sidebarCollapsed: boolean
-}
+const pages = [...navGroups.flatMap((group) => group.items), profileNavItem]
 
-/** Derive a human-readable page title from the current pathname. */
-function usePageTitle(): string {
+export function Topbar({ onOpenNavigation }: { onOpenNavigation: () => void }) {
   const { pathname } = useLocation()
-
-  // Check all nav groups
-  for (const group of navGroups) {
-    for (const item of group.items) {
-      if (pathname === item.path || pathname.startsWith(item.path + '/')) {
-        return item.label
-      }
-    }
-  }
-  if (pathname === profileNavItem.path) return profileNavItem.label
-
-  // Fallback: capitalise the last path segment
-  const segment = pathname.split('/').filter(Boolean).pop() ?? 'Dashboard'
-  return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ')
-}
-
-export function Topbar({ sidebarCollapsed: _sidebarCollapsed }: TopbarProps) {
-  const pageTitle = usePageTitle()
-
+  const [query, setQuery] = useState('')
+  const page =
+    pages.find((item) => pathname === item.path)?.label ?? 'Workspace'
+  const matches = pages.filter((item) =>
+    item.label.toLowerCase().includes(query.toLowerCase()),
+  )
   return (
-    <header
-      className={[
-        'flex items-center justify-between flex-shrink-0',
-        'h-[60px] px-6',
-        'bg-white border-b border-gray-200',
-        'z-10',
-      ].join(' ')}
-    >
-      {/* Left: page context */}
-      <div className="flex items-center min-w-0">
-        <h1 className="text-[15px] font-semibold text-gray-800 truncate">{pageTitle}</h1>
-      </div>
-
-      {/* Right: search + notifications + user avatar */}
-      <div className="flex items-center gap-3 flex-shrink-0">
-        {/* Search placeholder */}
-        <div className="hidden sm:flex items-center gap-2 h-8 px-3 rounded-md border border-gray-200 bg-gray-50 text-gray-400 text-sm cursor-pointer hover:border-gray-300 transition-colors duration-150 select-none">
-          <Search size={14} aria-hidden="true" />
-          <span className="text-xs">Search…</span>
-          {/* TODO: Implement global search after backend API contract is finalised. */}
-        </div>
-
-        {/* Notifications */}
+    <header className="z-10 flex h-20 shrink-0 items-center justify-between gap-4 border-b border-gray-200/70 bg-white/80 px-4 backdrop-blur-md sm:px-8">
+      <div className="flex min-w-0 items-center gap-3">
         <button
-          id="topbar-notifications"
-          aria-label="Notifications"
-          className="relative w-8 h-8 rounded-md flex items-center justify-center text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors duration-150"
+          onClick={onOpenNavigation}
+          aria-label="Open navigation"
+          className="rounded-xl border border-gray-200 p-2 text-gray-600 md:hidden"
         >
-          <Bell size={16} />
-          {/* Notification dot — placeholder */}
-          <span
-            className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-indigo-600"
-            aria-hidden="true"
-          />
-          {/* TODO: Connect to backend notification system after API contract is finalised. */}
+          <Menu size={20} />
         </button>
-
-        {/* Divider */}
-        <div className="h-5 w-px bg-gray-200" aria-hidden="true" />
-
-        {/* User avatar */}
+        <span className="hidden text-xs text-gray-400 lg:block">Workspace</span>
+        <ChevronRight size={14} className="hidden text-gray-300 lg:block" />
+        <span className="truncate text-sm font-medium text-gray-700">
+          {page}
+        </span>
+      </div>
+      <div className="flex shrink-0 items-center gap-4">
         <div
-          id="topbar-user-menu"
-          className="flex items-center gap-2 cursor-pointer select-none"
-          role="button"
-          tabIndex={0}
-          aria-label="User menu"
+          className="relative hidden sm:block"
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setQuery('')
+          }}
         >
-          <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-semibold text-white flex-shrink-0">
-            U
-          </div>
-          <span className="hidden md:block text-sm font-medium text-gray-700 truncate max-w-[120px]">
-            {/* TODO: Replace with authenticated user's name from backend. */}
-            User
-          </span>
+          <Search
+            size={15}
+            className="pointer-events-none absolute left-3 top-3 text-gray-400"
+          />
+          <input
+            aria-label="Find a page"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Find a page…"
+            className="h-10 w-44 rounded-xl border border-gray-200 bg-gray-50/70 pl-9 pr-3 text-xs focus:border-indigo-400 focus:outline-none lg:w-56"
+          />
+          {query && (
+            <div className="absolute right-0 top-12 max-h-72 w-64 overflow-y-auto rounded-xl border border-gray-200 bg-white p-2 shadow-xl">
+              {matches.length ? (
+                matches.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setQuery('')}
+                    className="flex items-center gap-3 rounded-lg p-3 text-xs text-gray-600 hover:bg-indigo-50 hover:text-indigo-700"
+                  >
+                    <item.icon size={16} />
+                    {item.label}
+                  </Link>
+                ))
+              ) : (
+                <p className="p-3 text-xs text-gray-500">No matching pages.</p>
+              )}
+            </div>
+          )}
         </div>
+        <Link
+          to="/profile"
+          aria-label="Your profile"
+          className="flex size-9 items-center justify-center rounded-full border border-indigo-100 bg-indigo-50 text-xs font-semibold text-indigo-700 transition-colors hover:bg-indigo-100"
+        >
+          U
+        </Link>
       </div>
     </header>
   )

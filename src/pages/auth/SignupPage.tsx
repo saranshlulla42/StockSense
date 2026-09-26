@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { TrendingUp, Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
+import {
+  TrendingUp,
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  ArrowLeft,
+} from 'lucide-react'
+import { AuthAside } from '../../components/layout/AuthAside'
 
 export function SignupPage() {
   const navigate = useNavigate()
@@ -25,7 +34,9 @@ export function SignupPage() {
           <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm">
             <TrendingUp size={18} className="text-white" />
           </div>
-          <span className="font-bold text-gray-900 text-lg tracking-tight">StockSense</span>
+          <span className="font-bold text-gray-900 text-lg tracking-tight">
+            StockSense
+          </span>
         </Link>
         <Link
           to="/"
@@ -37,33 +48,49 @@ export function SignupPage() {
       </nav>
 
       {/* Card */}
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
+      <div className="relative mx-auto grid w-full max-w-6xl flex-1 items-center gap-10 px-5 py-10 sm:px-8 lg:grid-cols-2 lg:gap-20">
+        <AuthAside />
+        <div className="mx-auto w-full max-w-md">
           {/* Decorative blobs */}
           <div
             className="absolute top-24 right-8 w-64 h-64 rounded-full pointer-events-none"
-            style={{ background: '#6366f1', opacity: 0.05, filter: 'blur(60px)' }}
+            style={{
+              background: '#6366f1',
+              opacity: 0.05,
+              filter: 'blur(60px)',
+            }}
           />
           <div
             className="absolute bottom-16 left-8 w-64 h-64 rounded-full pointer-events-none"
-            style={{ background: '#8b5cf6', opacity: 0.05, filter: 'blur(60px)' }}
+            style={{
+              background: '#8b5cf6',
+              opacity: 0.05,
+              filter: 'blur(60px)',
+            }}
           />
 
-          <div className="relative bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-100/60 p-8">
+          <div className="relative bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-9">
             {/* Header */}
             <div className="text-center mb-8">
               {/* Placeholder logo */}
               <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
                 <TrendingUp size={26} className="text-white" />
               </div>
-              <h1 className="text-2xl font-black text-gray-900 mb-1 tracking-tight">Create your account</h1>
-              <p className="text-sm text-gray-500">Start managing inventory smarter, today</p>
+              <h1 className="text-2xl font-black text-gray-900 mb-1 tracking-tight">
+                Create your account
+              </h1>
+              <p className="text-sm text-gray-500">
+                Start managing inventory smarter, today
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Full name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="name">
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  htmlFor="name"
+                >
                   Full name
                 </label>
                 <div className="relative">
@@ -87,7 +114,10 @@ export function SignupPage() {
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="email">
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  htmlFor="email"
+                >
                   Work email
                 </label>
                 <div className="relative">
@@ -111,7 +141,10 @@ export function SignupPage() {
 
               {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="password">
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -135,7 +168,10 @@ export function SignupPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    tabIndex={-1}
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
+                    aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -162,9 +198,14 @@ export function SignupPage() {
               {/* Terms */}
               <p className="text-xs text-gray-400 leading-relaxed">
                 By creating an account, you agree to our{' '}
-                <a href="#" className="text-indigo-600 hover:underline">Terms of Service</a>{' '}
+                <a href="#" className="text-indigo-600 hover:underline">
+                  Terms of Service
+                </a>{' '}
                 and{' '}
-                <a href="#" className="text-indigo-600 hover:underline">Privacy Policy</a>.
+                <a href="#" className="text-indigo-600 hover:underline">
+                  Privacy Policy
+                </a>
+                .
               </p>
 
               {/* Submit */}
@@ -178,7 +219,10 @@ export function SignupPage() {
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Already have an account?{' '}
-              <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+              <Link
+                to="/login"
+                className="text-indigo-600 hover:text-indigo-700 font-semibold"
+              >
                 Sign in
               </Link>
             </p>

@@ -1,9 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ─── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
   /* Primary palette – Indigo */
-  --color-primary-50:  #eef2ff;
+  --color-primary-50: #eef2ff;
   --color-primary-100: #e0e7ff;
   --color-primary-200: #c7d2fe;
   --color-primary-500: #6366f1;
@@ -12,7 +12,7 @@
   --color-primary-900: #312e81;
 
   /* Neutrals */
-  --color-gray-50:  #f9fafb;
+  --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
   --color-gray-300: #d1d5db;
@@ -24,38 +24,74 @@
   --color-gray-900: #111827;
 
   /* Sidebar */
-  --sidebar-bg:      #0f172a;  /* slate-900 */
-  --sidebar-hover:   #1e293b;  /* slate-800 */
-  --sidebar-active:  #1d4ed8;  /* blue-700 */
-  --sidebar-text:    #94a3b8;  /* slate-400 */
+  --sidebar-bg: #0f172a; /* slate-900 */
+  --sidebar-hover: #1e293b; /* slate-800 */
+  --sidebar-active: #1d4ed8; /* blue-700 */
+  --sidebar-text: #94a3b8; /* slate-400 */
   --sidebar-text-active: #ffffff;
-  --sidebar-width:   240px;
+  --sidebar-width: 240px;
   --sidebar-collapsed-width: 64px;
 
   /* Status colours */
-  --color-success: #16a34a;  /* green-600 */
-  --color-warning: #d97706;  /* amber-600 */
-  --color-danger:  #dc2626;  /* red-600 */
-  --color-info:    #2563eb;  /* blue-600 */
+  --color-success: #16a34a; /* green-600 */
+  --color-warning: #d97706; /* amber-600 */
+  --color-danger: #dc2626; /* red-600 */
+  --color-info: #2563eb; /* blue-600 */
 
   /* Surface */
   --topbar-height: 60px;
 }
 
 /* ─── Base Reset ─────────────────────────────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Tailwind's preflight already resets spacing in its base layer. An unlayered
+   reset here would override every p-*, m-* and mx-auto utility. */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+  body {
+    margin: 0;
+  }
+  button,
+  a,
+  input,
+  select {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button:not(:disabled),
+  a {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: #e0e7ff;
+    color: #312e81;
+  }
 }
 
-html, body, #root {
+@theme {
+  --font-sans:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html,
+body,
+#root {
   height: 100%;
   min-height: 100%;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   font-size: 14px;
   line-height: 1.5;
   color: var(--color-gray-800);
@@ -82,5 +118,43 @@ body {
 
 /* ─── Utility: no horizontal overflow ───────────────────────────────────────── */
 #root {
-  overflow-x: hidden;
+  isolation: isolate;
+}
+
+.editorial-accent {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.hero-grid {
+  background-image:
+    linear-gradient(#6366f108 1px, transparent 1px),
+    linear-gradient(90deg, #6366f108 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+.page-enter {
+  animation: page-enter 400ms ease-out both;
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { TrendingUp, Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
+import { AuthAside } from '../../components/layout/AuthAside'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -25,7 +26,9 @@ export function LoginPage() {
           <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm">
             <TrendingUp size={18} className="text-white" />
           </div>
-          <span className="font-bold text-gray-900 text-lg tracking-tight">StockSense</span>
+          <span className="font-bold text-gray-900 text-lg tracking-tight">
+            StockSense
+          </span>
         </Link>
         <Link
           to="/"
@@ -37,33 +40,49 @@ export function LoginPage() {
       </nav>
 
       {/* Card */}
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md">
+      <div className="relative mx-auto grid w-full max-w-6xl flex-1 items-center gap-10 px-5 py-10 sm:px-8 lg:grid-cols-2 lg:gap-20">
+        <AuthAside />
+        <div className="mx-auto w-full max-w-md">
           {/* Decorative blobs */}
           <div
             className="absolute top-24 left-8 w-64 h-64 rounded-full pointer-events-none"
-            style={{ background: '#6366f1', opacity: 0.05, filter: 'blur(60px)' }}
+            style={{
+              background: '#6366f1',
+              opacity: 0.05,
+              filter: 'blur(60px)',
+            }}
           />
           <div
             className="absolute bottom-16 right-8 w-64 h-64 rounded-full pointer-events-none"
-            style={{ background: '#06b6d4', opacity: 0.05, filter: 'blur(60px)' }}
+            style={{
+              background: '#06b6d4',
+              opacity: 0.05,
+              filter: 'blur(60px)',
+            }}
           />
 
-          <div className="relative bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-100/60 p-8">
+          <div className="relative bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-9">
             {/* Header */}
             <div className="text-center mb-8">
               {/* Placeholder logo */}
               <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
                 <TrendingUp size={26} className="text-white" />
               </div>
-              <h1 className="text-2xl font-black text-gray-900 mb-1 tracking-tight">Welcome back</h1>
-              <p className="text-sm text-gray-500">Sign in to your StockSense account</p>
+              <h1 className="text-2xl font-black text-gray-900 mb-1 tracking-tight">
+                Welcome back
+              </h1>
+              <p className="text-sm text-gray-500">
+                Sign in to your StockSense account
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5" htmlFor="email">
+                <label
+                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  htmlFor="email"
+                >
                   Email address
                 </label>
                 <div className="relative">
@@ -88,12 +107,18 @@ export function LoginPage() {
               {/* Password */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-sm font-medium text-gray-700" htmlFor="password">
+                  <label
+                    className="text-sm font-medium text-gray-700"
+                    htmlFor="password"
+                  >
                     Password
                   </label>
-                  <a href="#" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">
-                    Forgot password?
-                  </a>
+                  <span
+                    className="text-xs text-gray-400"
+                    title="Password recovery is not available in this preview"
+                  >
+                    Need help signing in?
+                  </span>
                 </div>
                 <div className="relative">
                   <Lock
@@ -115,7 +140,10 @@ export function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    tabIndex={-1}
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
+                    aria-pressed={showPassword}
                   >
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
@@ -133,7 +161,10 @@ export function LoginPage() {
 
             <p className="text-center text-sm text-gray-500 mt-6">
               Don't have an account?{' '}
-              <Link to="/signup" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+              <Link
+                to="/signup"
+                className="text-indigo-600 hover:text-indigo-700 font-semibold"
+              >
                 Sign up free
               </Link>
             </p>

@@ -21,9 +21,9 @@ const variantStyles: Record<Variant, string> = {
 }
 
 const sizeStyles: Record<Size, string> = {
-  sm: 'h-7 px-3 text-xs gap-1.5',
-  md: 'h-9 px-4 text-sm gap-2',
-  lg: 'h-10 px-5 text-sm gap-2',
+  sm: 'h-9 px-3.5 text-xs gap-1.5',
+  md: 'h-11 px-4 text-sm gap-2',
+  lg: 'h-12 px-6 text-sm gap-2',
 }
 
 export function Button({
@@ -41,7 +41,7 @@ export function Button({
     <button
       disabled={isDisabled}
       className={[
-        'inline-flex items-center justify-center rounded-md font-medium',
+        'inline-flex items-center justify-center rounded-xl font-semibold shrink-0',
         'transition-colors duration-150 cursor-pointer select-none',
         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 focus-visible:outline-offset-2',
         'disabled:opacity-50 disabled:cursor-not-allowed',
@@ -61,8 +61,11 @@ export function Button({
         >
           <circle
             className="opacity-25"
-            cx="12" cy="12" r="10"
-            stroke="currentColor" strokeWidth="4"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
           />
           <path
             className="opacity-75"
